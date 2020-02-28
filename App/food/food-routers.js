@@ -1,16 +1,18 @@
 const express = require("express");
 const Router = express.Router();
 
+const authentication = require("../middleware/authentication");
+const authorization = require("../middleware/authorization");
 const food = require("./food-controllers");
 
-Router.get("/", food.getAllFoods);
+Router.get("/", [authentication], food.getAllFoods);
 
-Router.get("/:name", food.getFoodByName);
+Router.get("/:name", [authentication, authorization], food.getFoodByName);
 
-Router.post("/", food.addFood);
+Router.post("/", [authentication, authorization], food.addFood);
 
-Router.delete("/:name", food.deleteFood);
+Router.delete("/:name", [authentication, authorization], food.deleteFood);
 
-Router.put("/:name", food.putFood);
+Router.put("/:name", [authentication, authorization], food.putFood);
 
 module.exports = Router;

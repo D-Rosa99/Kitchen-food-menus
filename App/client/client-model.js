@@ -1,34 +1,40 @@
+const config = require("config");
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
+const jwt = require("jsonwebtoken");
 
-const Client = mongoose.model(
-  "Clients",
-  new mongoose.Schema({
-    name: {
-      type: String,
-      maxlength: 25,
-      required: true
-    },
+const clientSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    maxlength: 25,
+    required: true
+  },
 
-    email: {
-      type: String,
-      required: true
-    },
+  email: {
+    type: String,
+    required: true
+  },
 
-    password: {
-      type: String,
-      minlength: 4,
-      required: true
-    },
+  password: {
+    type: String,
+    minlength: 4,
+    required: true
+  },
 
-    role: {
-      type: String,
-      required: true,
-      enum: ["admin", "client"],
-      default: "client"
-    }
-  })
-);
+  role: {
+    type: String,
+    required: true,
+    enum: ["admin", "client", "chef"],
+    default: "client"
+  }
+});
+
+clientSchema.methods.genJWT = function() {
+  const token = jwt.sign({ role: this.role }, config.get("JWTkey"));
+  return token;
+};
+
+const Client = mongoose.model("Clients", clientSchema);
 
 const validClient = userInput => {
   const clientSchema = Joi.object({
@@ -40,7 +46,8 @@ const validClient = userInput => {
       .required(),
     password: Joi.string()
       .min(4)
-      .required()
+      .required(),
+    role: Joi.string().valid("admin", "client", "chef")
   });
 
   return clientSchema.validate(userInput);

@@ -1,28 +1,23 @@
+require("./init/db-startUp")();
+const config = require("config");
 const express = require("express");
-const mongoose = require("mongoose");
 const app = express();
+require("./init/api-startUp")(app);
 
-const billRouters = require("./bill/bill-routers");
-const clientRouters = require("./client/client-routers");
-const foodCategoryRouters = require("./foodCategory/foodCategory-routers");
-const foodRouters = require("./food/food-routers");
-const ingredientRouters = require("./ingredient/ingredient-routers");
+if (!config.get("JWTkey")) {
+  console.error("FATA ERROR: JWTkey is not define");
+  process.exit(1);
+}
 
-mongoose
-  .connect("mongodb://localhost:27017/KitchenFoodMenus", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log("Database up!"))
-  .catch(err => console.log(err));
+process.on("uncaughtException", () => {
+  console.log("There was an error, the execution will end");
+  process.exit(1);
+});
 
-app.use(express.json());
-app.use("/api/food", foodRouters);
-app.use("/api/ingredient", ingredientRouters);
-app.use("/api/client", clientRouters);
-app.use("/api/food-category", foodCategoryRouters);
-app.use("/api/bill", billRouters);
-app.use((req, res, error));
+process.on("unhandledRejection", () => {
+  console.log("There was an error, the execution will end");
+  process.exit(1);
+});
 
 const port = process.env.PORT ? process.env.PORT : 3000;
 app.listen(port, console.log(`Server running on port ${port}!`));
