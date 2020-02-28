@@ -1,0 +1,42 @@
+{
+  "name": "Kitchen-food-menus",
+  "version": "1.0.0",
+  "description": "A project made in NODEjs and EXPRESS about kitchen and food, only admin users can add, delete and edit meals. Other type of users can buy and see any kind of meal in the menu, every food have a category.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon App/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/D-Rosa99/Kitchen-food-menus.git"
+  },
+  "keywords": [
+    "@hapi/joi",
+    "bcrypt",
+    "Config",
+    "Express",
+    "jsonwebtoken",
+    "Mongoose",
+    "Nodejs"
+  ],
+  "author": "David De La Rosa R.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/D-Rosa99/Kitchen-food-menus/issues"
+  },
+  "homepage": "https://github.com/D-Rosa99/Kitchen-food-menus#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "bcrypt": "^4.0.0",
+    "config": "^3.3.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.2"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  }
+}
