@@ -9,6 +9,8 @@ Here is a list of the technologies I use:
 - Node.js
 - MongoDB
 - Express.js
+- Winston
+- Husky
 
 ## How to run it
 
