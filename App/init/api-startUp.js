@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 
 const authRouter = require("../client/auth-router");
 const billRouters = require("../bill/bill-routers");
@@ -9,6 +10,7 @@ const foodRouters = require("../food/food-routers");
 const ingredientRouters = require("../ingredient/ingredient-routers");
 
 module.exports = function(app) {
+  app.use(morgan("dev"));
   app.use(express.json());
   app.use("/api/auth", authRouter);
   app.use("/api/food", foodRouters);

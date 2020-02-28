@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const logger = require("../utils/logger");
 
 module.exports = function() {
   mongoose
@@ -6,6 +7,6 @@ module.exports = function() {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    .then(() => console.log("Database up!"))
-    .catch(err => console.log(err));
+    .then(() => logger.info("Database up!"))
+    .catch(err => logger.info(err));
 };
