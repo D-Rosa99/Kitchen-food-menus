@@ -15,6 +15,6 @@ module.exports = {
     const result = new Suggestion(value);
     await result.save();
 
-    res.status(200).send("Add it successfully!");
+    return res.status(200).send("Add it successfully!");
   }
 };

@@ -8,8 +8,10 @@ const error = require("../middleware/errorValidation");
 const foodCategoryRouters = require("../foodCategory/foodCategory-routers");
 const foodRouters = require("../food/food-routers");
 const ingredientRouters = require("../ingredient/ingredient-routers");
+const swaggerDoc = require("../utils/swaggerDoc");
 
 module.exports = function(app) {
+  swaggerDoc(app);
   app.use(morgan("dev"));
   app.use(express.json());
   app.use("/api/auth", authRouter);
