@@ -1,3 +1,4 @@
+require("express-async-errors");
 require("./init/db-startUp")();
 const config = require("config");
 const logger = require("./utils/logger");

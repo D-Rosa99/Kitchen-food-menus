@@ -1,0 +1,2406 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Kitchen and foods",
+    "version": "1.0.0",
+    "description": "A little project build on nodejs and express",
+    "contact": {
+      "name": "David De La Rosa",
+      "email": "d_de_la_rosa@intellisys.com.do"
+    }
+  },
+  "tags": [
+    {
+      "name": "Suggestion",
+      "Description": "Everything about client suggestions.",
+      "url": "http://localhost:3000/api/suggestion"
+    },
+    {
+      "name": "Bill",
+      "Description": "Everything about bills when the user buy something.",
+      "url": "http://localhost:3000/api/bill"
+    },
+    {
+      "name": "Food-Category",
+      "Description": "Everything about food-category, just admin users que add and see categories.",
+      "url": "http://localhost:3000/api/food-category"
+    },
+    {
+      "name": "Client",
+      "Description": "Everything about client, just admin users que add, see and delete clients.",
+      "url": "http://localhost:3000/api/client"
+    },
+    {
+      "name": "Ingredient",
+      "Description": "Everything about ingredients, just admin users que add, see and delete ingredients.",
+      "url": "http://localhost:3000/api/ingredient"
+    },
+    {
+      "name": "Food",
+      "Description": "Everything about foods, just admin users que add, see and delete ingredients.",
+      "url": "http://localhost:3000/api/food"
+    },
+    {
+      "name": "Authentication",
+      "Description": "Everything about authentication, The users have to enter their email and password and it will send a token to add in the header.",
+      "url": "http://localhost:3000/api/auth"
+    }
+  ],
+  "servers": [{ "url": "http://localhost:3000" }],
+  "paths": {
+    "/api/suggestion": {
+      "get": {
+        "tags": ["Suggestion"],
+        "description": "End-point to retrieve all the suggestion from the database.",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 4
+                      },
+                      "suggestion": {
+                        "type": "string",
+                        "example": "la comida estaba muy buena pero el atun quedo un poco salado"
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid Token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Suggestion"],
+        "description": "Add a suggestion to the kitchen",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "suggestion": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"suggestion\": \"esto es un test\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token, or add another field that do not have to enter.",
+            "content": {
+              "User enter an invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid Token"
+                }
+              },
+              "User enter a field that is not allowed": {
+                "schema": {
+                  "type": "string",
+                  "example": "'field' is not allowed"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/bill": {
+      "get": {
+        "tags": ["Bill"],
+        "description": "Retrieve all the information about bills from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "sellDate": {
+                        "type": "string",
+                        "example": "Feb-28,-2020"
+                      },
+                      "articles": {
+                        "type": "string",
+                        "example": "5e58d88f73cd021f50eb92bf"
+                      },
+                      "amountSold": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/bill/{date}": {
+      "get": {
+        "tags": ["Bill"],
+        "description": "Retrieve specific bill from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Feb-28,-2020"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "sellDate": {
+                        "type": "string",
+                        "example": "Feb-28,-2020"
+                      },
+                      "articles": {
+                        "type": "string",
+                        "example": "5e58d88f73cd021f50eb92bf"
+                      },
+                      "amountSold": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bill not found"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/bill/": {
+      "post": {
+        "tags": ["Bill"],
+        "description": "Adding bills to the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "articles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "amountSold": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"articles\": [\"arroz\"],\n    \"amountSold\": [5]\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food-category": {
+      "get": {
+        "tags": ["Food-Category"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NzIxMzZ9.5naoqA9hc0IMxbsX9UlX1C58nJTjCok4eV_U6d9dCaE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "desayuno"
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food-category/{categoryName}": {
+      "get": {
+        "tags": ["Food-Category"],
+        "description": "Retrieve specific category from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "categoryName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "desayuno"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "desayuno"
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Category not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food-category/": {
+      "post": {
+        "tags": ["Food-Category"],
+        "description": "Add a food-category to the database this action only admin que execute",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"cena\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food-category/{foodCategory}": {
+      "put": {
+        "tags": ["Food-Category"],
+        "description": "Edit a specific category from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "foodCategory",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "cena"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"merienda\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Update it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "Invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              },
+              "There is a food-category already registered": {
+                "schema": {
+                  "type": "string",
+                  "example": "This category is already registered in the database"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fodd-category not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food-category/{CategoryNme}": {
+      "delete": {
+        "tags": ["Food-Category"],
+        "description": "Auto generated using Swagger Inspector",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "CategoryNme",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "desayuno"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Delete it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Food-category not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/client": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Retrieve all clients from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Jose"
+                      },
+                      "role": {
+                        "type": "string",
+                        "example": "admin"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "jose05@gmail.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "$2b$04$O6VDXo59bkPmh2jgqhzeO.2se.7hWZV7pbfDVUU.wqud0a30Er82."
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/client/{userEmail}": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Retrieve a specific client from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "userEmail",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "cena"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "Jose"
+                      },
+                      "role": {
+                        "type": "string",
+                        "example": "admin"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "jose05@gmail.com"
+                      },
+                      "password": {
+                        "type": "string",
+                        "example": "$2b$04$O6VDXo59bkPmh2jgqhzeO.2se.7hWZV7pbfDVUU.wqud0a30Er82."
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Client not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/client/": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Add specific client to the database, if the email entered is in the database will throw a 400 error",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"yimi\",\n    \"email\": \"yimi05@hotmail.com\",\n    \"password\": \"123456789\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "Invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              },
+              "Email address already register in the database": {
+                "schema": {
+                  "type": "string",
+                  "example": "This email is already registered"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+
+    "/api/client/{UserEmail}": {
+      "put": {
+        "tags": ["Client"],
+        "description": "Update a specific client from the client, only admin can execute this request",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "UserEmail",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "jose05@gmail.com"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"yimi\",\n    \"email\": \"yimi05@aa.com\",\n    \"password\": \"123456789\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Updated it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "Invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              },
+              "There is a user with that email": {
+                "schema": {
+                  "type": "string",
+                  "example": "That email is already registered is our database"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "client not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/client/{emailUser}": {
+      "delete": {
+        "tags": ["Client"],
+        "description": "Delete a specific client from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "emailUser",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "jose05gmail.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Delete it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Client not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/ingredient": {
+      "get": {
+        "tags": ["Ingredient"],
+        "description": "Retrieve all ingredients from the database only admin user can do this request.",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "papa"
+                      },
+                      "purchasePrice": {
+                        "type": "intenger",
+                        "example": 50
+                      },
+                      "numStock": {
+                        "type": "intenger",
+                        "example": 5
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/ingredient/{ingredientName}": {
+      "get": {
+        "tags": ["Ingredient"],
+        "description": "Retrieve a specific ingredient from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "ingredientName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "papa"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "papa"
+                      },
+                      "purchasePrice": {
+                        "type": "intenger",
+                        "example": 50
+                      },
+                      "numStock": {
+                        "type": "intenger",
+                        "example": 5
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Ingredient not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/ingredient/": {
+      "post": {
+        "tags": ["Ingredient"],
+        "description": "Adding a new ingredient to the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "numStock": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "purchasePrice": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"yuca\",\n    \"purchasePrice\": 50,\n    \"numStock\": 5\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/ingredient/{IngredientName}": {
+      "put": {
+        "tags": ["Ingredient"],
+        "description": "Update a specific ingredient in the database, if you try to add a ingredient that is already in the database will give you a 400 error",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "IngredientName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "yuca"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "numStock": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "purchasePrice": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"azucar\",\n    \"purchasePrice\": 50,\n    \"numStock\": 5\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Update it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "Invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              },
+              "The same ingredient name": {
+                "schema": {
+                  "type": "string",
+                  "example": "There is already a ingredient registered with that name"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Ingredient not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/ingredient/{IngName}": {
+      "delete": {
+        "tags": ["Ingredient"],
+        "description": "Deleting a specific ingredient ingredient in the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "IngName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "azucar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Delete it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Ingredient not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food": {
+      "get": {
+        "tags": ["Food"],
+        "description": "Retrieve all the foods from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "isAvaliable": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "ingredients": {
+                        "type": "array",
+                        "example": ["5e58b831f250b40bfc8fb129"]
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "arroz frito"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 50
+                      },
+                      "category": {
+                        "type": "string",
+                        "example": "5e58beb7c323c40d705c485f"
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "When the user did not enter the right token.",
+                  "content": {
+                    "text/html": {
+                      "schema": {
+                        "type": "string",
+                        "example": "Invalid token"
+                      }
+                    }
+                  }
+                },
+                "403": {
+                  "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+                  "content": {
+                    "text/html": {
+                      "schema": {
+                        "type": "string",
+                        "example": "You do not have enouth permission to make this request"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food/{foodNma}": {
+      "get": {
+        "tags": ["Food"],
+        "description": "Retrieve a specific food from the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "foodNma",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "arroz frito"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "isAvaliable": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "ingredients": {
+                        "type": "array",
+                        "example": ["5e58b831f250b40bfc8fb129"]
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "arroz frito"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 50
+                      },
+                      "category": {
+                        "type": "string",
+                        "example": "5e58beb7c323c40d705c485f"
+                      },
+                      "_v": {
+                        "type": "integer",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Food not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food/": {
+      "post": {
+        "tags": ["Food"],
+        "description": "Add a food to the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"espagueti\",\n    \"price\": 50,\n    \"ingredients\": [\"leche\"],\n    \"category\": \"merienda\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food/{foodName}": {
+      "put": {
+        "tags": ["Food"],
+        "description": "Update a specific food in the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "foodName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "salami con frito"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"name\": \"frito con salami\",\n    \"price\": 50,\n    \"ingredients\": [\"leche\"],\n    \"category\": \"merienda\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Update it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "Invalid token": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              },
+              "There is a food with that name": {
+                "schema": {
+                  "type": "string",
+                  "example": "There is a food with that name already registered"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Food not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/food/{FoodName}": {
+      "delete": {
+        "tags": ["Food"],
+        "description": "Delete a specific food in the database",
+        "parameters": [
+          {
+            "name": "x-auth-JWTkey",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+          },
+          {
+            "name": "FoodName",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "example": "frito con salami"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "Add it successfully!"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "When the user did not enter the right token.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Invalid token"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the user is authenticated in the application but does not have the permissions to make this request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "You do not have enouth permission to make this request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "Food not found"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    },
+    "/api/auth": {
+      "post": {
+        "tags": ["Authentication"],
+        "description": "To log-in a user in the app.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "1": {
+                  "value": "{\n    \"email\" : \"davidrr261096@gmail.com\",\n    \"password\": \"123456789\"\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "When the user have the right token and enough permission to make the request.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "examples": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1ODM0NDg4NTF9.maFZ_yVj8nGCb_bPjL3IzHK8J7nvK3SpyJapiLtzOqM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "When the user make a request for a invalid bill.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "email or password invalid"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "http://localhost:3000"
+        }
+      ]
+    }
+  }
+}

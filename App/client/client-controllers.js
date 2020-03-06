@@ -50,7 +50,7 @@ module.exports = {
     }
 
     const client = await Client.findOneAndUpdate(
-      { _id: result._id },
+      { email: req.params.email },
       { $set: value },
       { useFindAndModify: false }
     );

@@ -7,5 +7,5 @@ module.exports = (req, res, next) => {
     ? next()
     : res
         .status(403)
-        .send("You do not hace enouth permission to make this request");
+        .send("You do not have enouth permission to make this request");
 };
