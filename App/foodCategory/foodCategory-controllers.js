@@ -28,13 +28,13 @@ module.exports = {
 
     const getFoodCategory = await FoodCategory.findOne({ name: value.name });
     if (getFoodCategory) {
-      res.status(400).send(`There's already a category with that name`);
+      return res.status(400).send(`There's already a category with that name`);
     }
 
     const result = new FoodCategory(value);
     await result.save();
 
-    res.status(200).send("Add it successfully!");
+    return res.status(200).send("Add it successfully!");
   },
 
   putFoodCategory: async (req, res) => {
