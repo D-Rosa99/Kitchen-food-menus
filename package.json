@@ -56,11 +56,6 @@
     "nodemon": "2.0.2",
     "prettier": "1.19.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test"
-    }
-  },
   "lint-staged": {
     "*.{js,json}": [
       "prettier --write",

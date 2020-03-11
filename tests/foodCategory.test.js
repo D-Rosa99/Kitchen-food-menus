@@ -25,7 +25,7 @@ describe("Retrieve food category from the database", () => {
     FoodCategory.find = jest.fn(() => data);
     const test = await getAllFoodCategories(request, response);
 
-    expect(test.status).toBe(200);
+    expect(test.status).toBe(400);
     expect(test.data).toEqual({ _id: 1, name: "desayuno", _v: 0 });
   });
 
@@ -41,7 +41,7 @@ describe("Retrieve food category from the database", () => {
 
     expect(request.params.name).toBeDefined();
     expect(typeof request.params.name).toBe("string");
-    expect(test.status).toBe(200);
+    expect(test.status).toBe(100);
     expect(test.data).toMatchObject({ _id: 5, name: "desayuno", _v: 0 });
   });
 
@@ -50,7 +50,7 @@ describe("Retrieve food category from the database", () => {
 
     const test = await getFoodCategoryByName(request, response);
 
-    expect(test.status).toBe(404);
+    expect(test.status).toBe(500);
     expect(test.message).toBe("FoodCategory not found, invalid name!");
   });
 });
@@ -65,7 +65,7 @@ describe("Add a food category to the database", () => {
     const test = await addFoodCategory(request, response);
 
     expect(test.status).toBe(400);
-    expect(test.message).toBe("There is a field that should not be there");
+    expect(test.message).toBe("that should not be there");
   });
 
   it("Should return an friendly error message for a value that is already in the database", async () => {
@@ -92,7 +92,7 @@ describe("Add a food category to the database", () => {
     FoodCategory.save = jest.fn(() => true);
     const test = await addFoodCategory(request, response);
 
-    expect(test.status).toBe(200);
+    expect(test.status).toBe(20);
     expect(test.message).toBe("Add it successfully!");
   });
 });
