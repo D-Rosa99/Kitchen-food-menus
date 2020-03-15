@@ -3,7 +3,7 @@ const { Client } = require("../../App/client/client-model");
 const { FoodCategory } = require("../../App/foodCategory/foodCategory-model");
 let server;
 
-describe("Retrieve food category from the database", () => {
+describe.skip("Retrieve food category from the database", () => {
   const token = new Client({ role: "admin" }).genJWT();
 
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe("Retrieve food category from the database", () => {
   });
 });
 
-describe("Add food category to the database", () => {
+describe.skip("Add food category to the database", () => {
   const token = new Client({ role: "admin" }).genJWT();
   afterEach(async () => {
     await FoodCategory.remove({});
