@@ -4,7 +4,7 @@ A project made in NODEjs and EXPRESS about kitchen and food, only admin users ca
 
 This project is back-end side, it's documented with openApi Swagger to visitors can easily try any request and see how end-points works in a better way.
 
-This project also has JEST to make all the test of it, I implemented unit test and it will be a integration test soon.
+This project also has JEST to make all the test of it, I implemented unit test and integration test
 
 ## Technologies
 
@@ -13,6 +13,7 @@ Here is a list of the technologies I used:
 - Node.js
 - Express.js
 - MongoDB
+- CircleCI
 - Jest
 - Winston
 - Husky

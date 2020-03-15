@@ -4,7 +4,7 @@
   "description": "A project made in NODEjs and EXPRESS about kitchen and food, only admin users can add, delete and edit meals. Other type of users can buy and see any kind of meal in the menu, every food have a category.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "start": "nodemon App/index.js"
   },
   "repository": {
@@ -54,7 +54,8 @@
     "lint-staged": "10.0.8",
     "morgan": "1.9.1",
     "nodemon": "2.0.2",
-    "prettier": "1.19.1"
+    "prettier": "1.19.1",
+    "supertest": "4.0.2"
   },
   "husky": {
     "hooks": {

@@ -2,13 +2,13 @@ const {
   getAllFoodCategories,
   getFoodCategoryByName,
   addFoodCategory
-} = require("../App/foodCategory/foodCategory-controllers");
+} = require("../../App/foodCategory/foodCategory-controllers");
 const {
   FoodCategory,
   validFoodCategory
-} = require("../App/foodCategory/foodCategory-model");
+} = require("../../App/foodCategory/foodCategory-model");
 
-jest.mock("../App/foodCategory/foodCategory-model");
+jest.mock("../../App/foodCategory/foodCategory-model");
 
 const request = jest.fn();
 const response = jest.fn();
